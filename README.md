@@ -1,21 +1,7 @@
-# How to use this template repository
+# Gnome Text Editor
 
-This is a template repository, meant to be copied to start a skeleton of other projects. This template provides a few things:
-- build workflow so that a snap is built automatically when a Pull Request (PR) is opened
-- PR template
-- README.md skeleton
-
-A bit about the README.md below:
-- Delete everything in this "How to use this template repository" (everything above the ==== line). 
-- Replace SNAP\_NAME with the name of the snap (ex. gnome-calculator).
-- Update any section starting with "TODO" to add the info requested, and remove the TODO line.
-
-========================================================================================
-# SNAP\_NAME
-
-TODO: Add links to badges. Here's the gnome-calculator badge links for example:
-*[![gnome-calculator](https://snapcraft.io/gnome-calculator/badge.svg)](https://snapcraft.io/gnome-calculator)
-[![gnome-calculator](https://snapcraft.io/gnome-calculator/trending.svg?name=0)](https://snapcraft.io/gnome-calculator)*
+*[![gnome-text-editor](https://snapcraft.io/gnome-text-editor/badge.svg)](https://snapcraft.io/gnome-text-editor)
+[![gnome-text-editor](https://snapcraft.io/gnome-text-editor/trending.svg?name=0)](https://snapcraft.io/gnome-text-editor)*
 
 Below you will find some instructions to help you contribute to this snap. The general workflow will be to submit PRs from your fork onto the "stable" branch. Once the pull request has been *submitted*, there is a GitHub action that will automatically launch a build of the snap that you can use for testing. And then once the PR has been *merged* the GitHub action will launch a build on launchpad that will be automatically uploaded to the snap store, in the candidate channel, for more extensive testing.
 
@@ -30,7 +16,7 @@ Here is the workflow for submitting a change to the stable branch, and getting i
 
 ```
 git remote rename origin myfork
-git remote add ubuntu https://github.com/ubuntu/SNAP_NAME.git
+git remote add ubuntu https://github.com/ubuntu/gnome-text-editor.git
 git fetch --all
 ```
 
@@ -68,6 +54,4 @@ git branch -u myfork/my-bugfix-branch
 3. When you feel they're ready for submitting to the main repository (stable branch), [open up a pull request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests) from your `my-bugfix-branch` to the `ubuntu/stable` branch.
 4. Once you've opened the PR, it will automatically trigger the build-test action that will launch a build of the snap. You can watch the progress of the snap build from your PR (Show all checks -> Details). Once the snap build has completed, you can find the built snap (to test with) under "Artifacts".
 4. Someone from the team will review the open PR and either merge it or start a discussion with you with additional changes or clarification needed.
-5. Once the PR has been merged into the stable branch, then on the next git mirror sync (every 4 hours), launchpad will trigger [a build of the snap that gets published](https://launchpad.net/~desktop-snappers/+snaps) to the [snap store](https://snapcraft.io) into the *candidate* channel. After sufficient testing of the snap from the candidate channel, then the reviewer (a Collaborator of the snap in the store) will promote the snap to the stable branch in the snap store.
-
-TODO: update the two links in step 5. above to point to actual builds and the correct snap page in the store.
+5. Once the PR has been merged into the stable branch, then on the next git mirror sync (every 4 hours), launchpad will trigger [a build of the snap that gets published](https://launchpad.net/~desktop-snappers/+snaps/gnome-text-editor) to the [snap store](https://snapcraft.io/gnome-text-editor) into the *candidate* channel. After sufficient testing of the snap from the candidate channel, then the reviewer (a Collaborator of the snap in the store) will promote the snap to the stable branch in the snap store.
