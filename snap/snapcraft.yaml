@@ -10,7 +10,7 @@ confinement: strict
 
 slots:
   # for GtkApplication registration
-  snap-store:
+  gnome-text-editor:
     interface: dbus
     bus: session
     name: org.gnome.TextEditor
