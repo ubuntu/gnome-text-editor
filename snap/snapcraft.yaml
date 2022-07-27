@@ -1,12 +1,9 @@
 name: gnome-text-editor
 base: core22
 version: '42.2'
-summary: A simple text editor
-description: |
-  The oficial Gnome Text Editor
-
 grade: stable
 confinement: strict
+adopt-info: gnome-text-editor
 
 slots:
   # for GtkApplication registration
@@ -24,6 +21,7 @@ apps:
     extensions: [gnome]
     command: usr/bin/gnome-text-editor
     desktop: usr/share/applications/org.gnome.TextEditor.desktop
+    common-id: org.gnome.TextEditor.desktop
     plugs:
       - gsettings
       - mount-observe
@@ -37,6 +35,7 @@ parts:
     meson-parameters:
       - --prefix=/usr
       - --buildtype=release
+    parse-info: [usr/share/metainfo/org.gnome.TextEditor.appdata.xml]
     override-prime: |
       craftctl default
       sed -i.bak -e 's|Icon=org.gnome.TextEditor$|Icon=${SNAP}/usr/share/icons/hicolor/scalable/apps/org.gnome.TextEditor.svg|g' $CRAFT_PRIME/usr/share/applications/org.gnome.TextEditor.desktop
