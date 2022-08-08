@@ -4,6 +4,15 @@ grade: stable
 confinement: strict
 adopt-info: gnome-text-editor
 
+# this is not used or needed for anything other than to trigger automatic
+# installation of the cups snap via "default-provider: cups"
+plugs:
+  foo-install-cups:
+    interface: content
+    content: foo
+    default-provider: cups
+    target: $SNAP_DATA/foo
+
 slots:
   # for GtkApplication registration
   gnome-text-editor:
@@ -24,6 +33,7 @@ apps:
     plugs:
       - gsettings
       - mount-observe
+      - cups
 
 parts:
   gnome-text-editor:
