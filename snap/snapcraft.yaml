@@ -38,13 +38,17 @@ apps:
 parts:
   gnome-text-editor:
     source: https://gitlab.gnome.org/GNOME/gnome-text-editor
-    source-tag: '42.2'
+    source-tag: '43.1'
     source-type: git
     plugin: meson
     meson-parameters:
       - --prefix=/usr
       - --buildtype=release
+      - -Dbugreport_url=https://github.com/ubuntu/gnome-text-editor/issues
     parse-info: [usr/share/metainfo/org.gnome.TextEditor.appdata.xml]
+    build-packages:
+      - libeditorconfig-dev
+      - libfreetype6
     override-pull: |
       craftctl default
       craftctl set version=$(git describe --tags --abbrev=10)
@@ -63,3 +67,10 @@ parts:
           gtk-update-icon-cache $i
         fi
       done
+  libraries:
+    after: [ gnome-text-editor ]
+    plugin: nil
+    stage-packages:
+      - libeditorconfig0
+    prime:
+      - usr/lib/*/libeditorconfig.so.*
