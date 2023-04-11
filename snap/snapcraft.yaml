@@ -39,7 +39,7 @@ apps:
 parts:
   gnome-text-editor:
     source: https://gitlab.gnome.org/GNOME/gnome-text-editor
-    source-tag: '43.2'
+    source-tag: '44.0'
     source-type: git
     plugin: meson
     meson-parameters:
