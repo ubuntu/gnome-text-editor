@@ -35,6 +35,7 @@ apps:
       - mount-observe
       - cups
       - home
+      - removable-media
 
 parts:
   gnome-text-editor:
