@@ -29,6 +29,8 @@ apps:
     extensions: [gnome]
     command: usr/bin/gnome-text-editor
     desktop: usr/share/applications/org.gnome.TextEditor.desktop
+    environment:
+      GDK_DEBUG: portals
     common-id: org.gnome.TextEditor.desktop
     environment:
       GTK_USE_PORTAL: "1"
