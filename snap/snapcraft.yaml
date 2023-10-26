@@ -30,6 +30,9 @@ apps:
     command: usr/bin/gnome-text-editor
     desktop: usr/share/applications/org.gnome.TextEditor.desktop
     common-id: org.gnome.TextEditor.desktop
+    environment:
+      GTK_USE_PORTAL: "1"
+      GDK_DEBUG: "portals"
     plugs:
       - gsettings
       - mount-observe
