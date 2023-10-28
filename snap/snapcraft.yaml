@@ -34,6 +34,8 @@ apps:
       GTK_USE_PORTAL: "1"
       GDK_DEBUG: "portals"
     plugs:
+      - home
+      - removable-media
       - mount-observe
       - cups
 
