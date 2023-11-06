@@ -34,18 +34,16 @@ apps:
       GTK_USE_PORTAL: "1"
       GDK_DEBUG: "portals"
     plugs:
-      - gsettings
-      - mount-observe
-      - cups
       - home
       - removable-media
+      - mount-observe
+      - cups
 
 parts:
   gnome-text-editor:
 # ext:updatesnap
-    source: https://gitlab.gnome.org/GNOME/gnome-text-editor
-    source-tag: '44.0'
-    source-type: git
+    source: https://gitlab.gnome.org/GNOME/gnome-text-editor.git
+    source-tag: '45.0'
     source-depth: 1
     plugin: meson
     meson-parameters:
@@ -59,21 +57,7 @@ parts:
     override-pull: |
       craftctl default
       craftctl set version=$(git describe --tags --abbrev=10)
-      sed -i.bak -e 's|Icon=@app_id@$|Icon=snap.gnome-text-editor.icon|g' data/org.gnome.TextEditor.desktop.in.in
-    override-build: |
-      craftctl default
-      mkdir -p ${CRAFT_PART_INSTALL}/meta/gui/icons/hicolor/scalable/apps
-      cp ../src/data/icons/org.gnome.TextEditor.svg ${CRAFT_PART_INSTALL}/meta/gui/icons/hicolor/scalable/apps/snap.gnome-text-editor.icon.svg
-    override-prime: |
-      craftctl default
-      for i in $CRAFT_PRIME/usr/share/icons/*;
-      do
-        if [ -f $i/index.theme ];
-        then
-          echo Updating cache at $i
-          gtk-update-icon-cache $i
-        fi
-      done
+
   libraries:
     after: [ gnome-text-editor ]
     plugin: nil
