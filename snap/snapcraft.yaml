@@ -34,7 +34,7 @@ parts:
   gnome-text-editor:
 # ext:updatesnap
     source: https://gitlab.gnome.org/GNOME/gnome-text-editor.git
-    source-tag: '45.2'
+    source-tag: '45.3'
     source-depth: 1
     plugin: meson
     meson-parameters:
