@@ -1,0 +1,130 @@
+diff --git a/meson.build b/meson.build
+index c58d821..0c02fcf 100644
+--- a/meson.build
++++ b/meson.build
+@@ -31,7 +31,7 @@ if not get_option('buildtype').startswith('debug')
+ endif
+ # Check dependencies
+ glib_req_version = '2.73'
+-gtk_req_version = '4.7'
+-gtksourceview_req_version = '5.5.0'
++gtk_req_version = '4.10'
++gtksourceview_req_version = '5.10.0'
+ enchant_req_version = '2.2.0'
+ 
+diff --git a/src/editor-preferences-font.c b/src/editor-preferences-font.c
+index ead997f..084c72d 100644
+--- a/src/editor-preferences-font.c
++++ b/src/editor-preferences-font.c
+@@ -69,20 +69,23 @@ editor_preferences_font_constructed (GObject *object)
+ }
+ 
+ static void
+-editor_preferences_font_dialog_response_cb (EditorPreferencesFont *self,
+-                                            int                    response,
+-                                            GtkFontChooserDialog  *dialog)
++editor_preferences_font_dialog_choose_font_cb (GObject      *object,
++                                               GAsyncResult *res,
++                                               gpointer      user_data)
+ {
++  GtkFontDialog *dialog = (GtkFontDialog *)object;
++  g_autoptr(EditorPreferencesFont) self = user_data;
++  PangoFontDescription* font_desc;
++
+   g_assert (EDITOR_IS_PREFERENCES_FONT (self));
+-  g_assert (GTK_IS_FONT_CHOOSER_DIALOG (dialog));
++  g_assert (GTK_IS_FONT_DIALOG (dialog));
+ 
+-  if (response == GTK_RESPONSE_OK)
++  if ((font_desc = gtk_font_dialog_choose_font_finish (dialog, res, NULL)))
+     {
+-      g_autofree gchar *font = gtk_font_chooser_get_font (GTK_FONT_CHOOSER (dialog));
++      g_autofree char *font = pango_font_description_to_string (font_desc);
+       g_settings_set_string (self->settings, self->schema_key, font);
++      g_clear_pointer (&font_desc, pango_font_description_free);
+     }
+-
+-  gtk_window_destroy (GTK_WINDOW (dialog));
+ }
+ 
+ static void
+@@ -90,27 +93,25 @@ editor_preferences_font_activated (AdwActionRow *row)
+ {
+   EditorPreferencesFont *self = (EditorPreferencesFont *)row;
+   PangoFontDescription *font_desc;
+-  g_autofree gchar *font = NULL;
+-  GtkWidget *dialog;
++  g_autofree char *font = NULL;
++  GtkFontDialog *dialog;
+   GtkWidget *window;
+ 
+   g_assert (ADW_IS_ACTION_ROW (self));
+ 
+   window = gtk_widget_get_ancestor (GTK_WIDGET (row), GTK_TYPE_WINDOW);
+-  dialog = gtk_font_chooser_dialog_new (_("Select Font"), GTK_WINDOW (window));
++  dialog = gtk_font_dialog_new ();
+   gtk_window_set_modal (GTK_WINDOW (window), TRUE);
+ 
+   font = g_settings_get_string (self->settings, self->schema_key);
+   font_desc = pango_font_description_from_string (font);
+-  gtk_font_chooser_set_font_desc (GTK_FONT_CHOOSER (dialog), font_desc);
+-
+-  g_signal_connect_object (dialog,
+-                           "response",
+-                           G_CALLBACK (editor_preferences_font_dialog_response_cb),
+-                           self,
+-                           G_CONNECT_SWAPPED);
+ 
+-  gtk_window_present (GTK_WINDOW (dialog));
++  gtk_font_dialog_choose_font (dialog,
++                               GTK_WINDOW (window),
++                               font_desc,
++                               NULL,
++                               editor_preferences_font_dialog_choose_font_cb,
++                               g_object_ref (self));
+ 
+   g_clear_pointer (&font_desc, pango_font_description_free);
+ }
+diff --git a/src/editor-utils.c b/src/editor-utils.c
+index f36b1be..710d7a4 100644
+--- a/src/editor-utils.c
++++ b/src/editor-utils.c
+@@ -225,7 +225,7 @@ hide_callback (gpointer data)
+   GtkWidget *widget = data;
+ 
+   g_object_set_data (data, "EDITOR_FADE_ANIMATION", NULL);
+-  gtk_widget_hide (widget);
++  gtk_widget_set_visible (widget, FALSE);
+   gtk_widget_set_opacity (widget, 1.0);
+   g_object_unref (widget);
+ }
+@@ -513,7 +513,7 @@ revealer_autohide (gpointer data)
+     {
+       if (!gtk_revealer_get_reveal_child (revealer) &&
+           !gtk_revealer_get_child_revealed (revealer))
+-        gtk_widget_hide (GTK_WIDGET (revealer));
++        gtk_widget_set_visible (GTK_WIDGET (revealer), FALSE);
+     }
+ 
+   return G_SOURCE_REMOVE;
+@@ -541,7 +541,7 @@ revealer_queue_autohide (GtkRevealer *revealer)
+   if ((gtk_revealer_get_reveal_child (revealer) ||
+        gtk_revealer_get_child_revealed (revealer)) &&
+       !gtk_widget_get_visible (GTK_WIDGET (revealer)))
+-    gtk_widget_show (GTK_WIDGET (revealer));
++    gtk_widget_set_visible (GTK_WIDGET (revealer), TRUE);
+ }
+ 
+ /* Try to get a revealer out of the size request machinery
+diff --git a/src/editor-window.ui b/src/editor-window.ui
+index f2e2819..9822815 100644
+--- a/src/editor-window.ui
++++ b/src/editor-window.ui
+@@ -6,6 +6,7 @@
+     <style>
+       <class name="org-gnome-TextEditor"/>
+     </style>
++    <property name="width-request">360</property>
+     <child>
+       <object class="AdwToolbarView">
+         <property name="top-bar-style">raised</property>

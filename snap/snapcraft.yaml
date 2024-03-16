@@ -48,6 +48,7 @@ parts:
     override-pull: |
       craftctl default
       craftctl set version=$(git describe --tags --abbrev=10)
+      git apply ${CRAFT_PROJECT_DIR}/patches/use-font-dialog.diff
 
   libraries:
     after: [ gnome-text-editor ]
