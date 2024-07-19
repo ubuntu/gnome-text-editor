@@ -1,5 +1,5 @@
 name: gnome-text-editor
-base: core22
+base: core24
 grade: stable
 confinement: strict
 adopt-info: gnome-text-editor
