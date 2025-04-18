@@ -41,7 +41,7 @@ parts:
       - --prefix=/usr
       - --buildtype=release
       - -Dbugreport_url=https://github.com/ubuntu/gnome-text-editor/issues
-    parse-info: [usr/share/metainfo/org.gnome.TextEditor.appdata.xml]
+    parse-info: [usr/share/metainfo/org.gnome.TextEditor.metainfo.xml]
     build-packages:
       - libeditorconfig-dev
       - libfreetype6
