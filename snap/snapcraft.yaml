@@ -31,8 +31,20 @@ apps:
       - cups
 
 parts:
+  libspelling:
+    plugin: meson
+    source: https://gitlab.gnome.org/GNOME/libspelling
+    source-type: git
+    source-tag: 0.4.7
+    meson-parameters:
+      - -Ddocs=false
+      - -Dintrospection=disabled
+      - --prefix=/usr
+    build-environment:
+      - CFLAGS: -Wno-error=redundant-decls
+
   gnome-text-editor:
-# ext:updatesnap
+    after: [libspelling]
     source: https://gitlab.gnome.org/GNOME/gnome-text-editor.git
     source-tag: '48.2'
     source-depth: 1
