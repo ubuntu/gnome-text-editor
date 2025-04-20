@@ -34,6 +34,7 @@ parts:
   libspelling:
     plugin: meson
     source: https://gitlab.gnome.org/GNOME/libspelling
+    source-depth: 1
     source-type: git
     source-tag: 0.4.7
     meson-parameters:
